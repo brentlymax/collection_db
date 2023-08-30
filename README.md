@@ -1,2 +1,7 @@
-# Start on localhost:3000
-npm run dev
+# Build and start
+npm run build
+npm run start
+
+# Update prisma
+npx prisma db pull
+npx prisma generate
