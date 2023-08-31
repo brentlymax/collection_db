@@ -8,17 +8,17 @@ datasource db {
 }
 
 model comics_graded {
-  title       String  @db.VarChar(250)
-  issue       String  @db.VarChar(5)
-  grade       Decimal @db.Decimal(2, 2)
-  page        String  @db.VarChar(50)
-  grader      String  @db.VarChar(50)
-  cert_number String  @id @db.VarChar(50)
-  publisher   String  @db.VarChar(50)
-  month       Int?    @db.SmallInt
-  year        Int?    @db.SmallInt
-  variant     String? @db.VarChar(250)
-  key_notes   String? @db.VarChar(250)
-  signed_by   String? @db.VarChar(250)
-  pedigree    String? @db.VarChar(250)
+  title     String  @db.VarChar(250)
+  issue     Int?    @db.SmallInt
+  grade     Decimal @db.Decimal(4, 2)
+  page_qual String  @db.VarChar(50)
+  grader    String  @db.VarChar(50)
+  cert_num  String  @id @db.VarChar(50)
+  publisher String  @db.VarChar(50)
+  pub_month Int?    @db.SmallInt
+  pub_year  Int?    @db.SmallInt
+  variant   String? @db.VarChar(250)
+  key_notes String? @db.VarChar(250)
+  signed_by String? @db.VarChar(250)
+  pedigree  String? @db.VarChar(250)
 }

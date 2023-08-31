@@ -5,20 +5,20 @@ import style from '../../styles/about.module.css';
 export default function About() {
 	return (
 		<Layout>
-			<div className={`flex_col flex_center w_100 h_100`}>
-				<div className={`flex_row w_100 flex_center mb_3`}>
-					<div className={`${style.image_wrapper} flex_col`}>
+			<div className={ `flex_col flex_center w_100 h_100` }>
+				<div className={ `flex_row w_100 flex_center mb_3` }>
+					<div className={ `${ style.image_wrapper } flex_col` }>
 						<Image
-							src={`/images/brentlymax.jpg`}
+							src={ `/images/brentlymax.jpg` }
 							alt=''
 							layout='fill'
 							objectFit='contain'
 						></Image>				
 					</div>
 				</div>
-				<div className={`flex_row w_100`}>
-					<div className={`flex_col flex_center w_100`}>
-						<div className={`flex_row flex_center w_50`}>
+				<div className={ `flex_row w_100` }>
+					<div className={ `flex_col flex_center w_100` }>
+						<div className={ `flex_row flex_center w_50` }>
 							<p>
 								Hey there, my name is Brently.
 								I'm a software engineer by day and a collector at all times.

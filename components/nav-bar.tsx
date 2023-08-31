@@ -1,5 +1,6 @@
-import {useState} from 'react';
-import NavItem from './nav-item';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const NAV_LIST = [
 	{
@@ -37,26 +38,46 @@ export default function NavBar() {
 
 	return (
 		<header>
-			<nav className={`nav_bar`}>
+			<nav className={ `nav_bar` }>
 				<div
-					onClick={() => setActiveNavMenu(!activeNavMenu)}
-					className={`nav_bar_menu_btn ml_1`}
+					onClick={ () => setActiveNavMenu(!activeNavMenu) }
+					className={ `nav_bar_menu_btn ml_1` }
 				>
 					<div></div>
 					<div></div>
 					<div></div>
 				</div>
-				<div className={`nav_bar_menu_div ${activeNavMenu ? 'active' : ''}`}>
-					{NAV_LIST.map((listItem) => (
-						<div
-							onClick={() => { setActiveNavMenu(false);}}
-							key={listItem.text}
-						>
-							<NavItem {...listItem}></NavItem>
-						</div>
-					))}
+				<div className={ `nav_bar_menu_div ${ activeNavMenu ? 'active' : '' }` }>
+					{
+						NAV_LIST.map((listItem) => (
+							<div
+								onClick={ () => { setActiveNavMenu(false); } }
+								key={ listItem.text }
+							>
+								<NavItem { ...listItem }></NavItem>
+							</div>
+						))
+					}
 				</div>
 			</nav>
 		</header>
+	);
+}
+
+function NavItem({ text, href }) {
+	const { asPath } = useRouter();
+	let isActive = false;
+
+	if (asPath == href) {
+		isActive = true;
+	}
+
+	return (
+		<Link
+			href={ href }
+			className={ `nav_item ${ isActive ? 'active' : '' }` }
+		>
+			{ text }
+		</Link>
 	);
 }
