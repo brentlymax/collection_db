@@ -1,8 +1,6 @@
 /* 
-	Main grey:			#71797E
-	Secondary grey:		#36454F
-	Tertiary green		#50C878
-	Tertiary blue:		#0096FF
+	Main grey:				#71797E
+	Secondary grey			#36454F
 */
 
 html,
@@ -101,36 +99,52 @@ p {
 	justify-content: space-around;
 }
 
-.w_100 {
-	width: 100%;
-}
-
-.w_75 {
-	width: 75%;
+.w_25 {
+	width: 25%;
 }
 
 .w_50 {
 	width: 50%;
 }
 
-.w_25 {
-	width: 25%;
+.w_75 {
+	width: 75%;
 }
 
-.h_100 {
-	height: 100%;
+.w_100 {
+	width: 100%;
 }
 
-.h_75 {
-	height: 75%;
+.h_25 {
+	height: 25%;
 }
 
 .h_50 {
 	height: 50%;
 }
 
-.h_25 {
-	height: 25%;
+.h_75 {
+	height: 75%;
+}
+
+.h_100 {
+	height: 100%;
+}
+
+.p_0 {
+	padding: 0;
+}
+
+.p_1 {
+	padding: 1rem;
+}
+
+.p_2 {
+	padding: 2rem;
+}
+
+.p_3 {
+	padding: 3rem;
 }
 
 .pl_0 {
@@ -195,6 +209,22 @@ p {
 
 .pb_3 {
 	padding-bottom: 3rem;
+}
+
+.m_0 {
+	margin: 0;
+}
+
+.m_1 {
+	margin: 1rem;
+}
+
+.m_2 {
+	margin: 2rem;
+}
+
+.m_3 {
+	margin: 3rem;
 }
 
 .ml_0 {
@@ -307,7 +337,7 @@ p {
 
 .nav_item.active {
 	font-weight: bold;
-	color: #50C878;
+	color: #D251DE;
 }
 
 @media screen and (min-width: 600px) {
@@ -323,4 +353,40 @@ p {
 		min-height: fit-content;
 		column-gap: 24px;
 	}
+}
+
+.graded_comics_table {
+	border-spacing: 0;
+	width: 100%;
+}
+
+.graded_comics_tbody {
+	width: 100%;
+}
+
+.graded_comics_tr_header {
+	background: #36454F;
+	width: 100%;
+}
+
+.graded_comics_th {
+	width: 10%;
+	padding: 1rem;
+}
+
+.graded_comics_tr_data {
+	width: 100%;
+}
+
+.graded_comics_tr_data.odd {
+	background: #836694;
+}
+
+.graded_comics_tr_data.even {
+	background: #704788;
+}
+
+.graded_comics_td {
+	width: 10%;
+	padding: 1rem;
 }

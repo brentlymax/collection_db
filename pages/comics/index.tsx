@@ -3,22 +3,7 @@ import CollectionTable from '../../components/collection-table';
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
-const GRADED_COMICS_HEADERS = [
-	'title',
-	'issue',
-	'grade',
-	'grader',
-	'cert_num',
-	'publisher',
-	'month',
-	'year',
-	'variant',
-	'key_notes',
-	'signed_by',
-	'pedigree'
-];
-
-export default function Comics({ comicTableHeaders, comicTableRows }) {
+export default function Comics({ comicTableHeaders, comicTableClasses, comicTableRows }) {
 	return (
 		<Layout>
 			<div className={ `flex_col flex_around w_100` }>
@@ -26,18 +11,13 @@ export default function Comics({ comicTableHeaders, comicTableRows }) {
 					<div className={ `flex_col w_100` }>
 						<div className={ `flex_row flex_center w_100` }>
 							<div className={ `flex_col flex_center w_100` }>
-								<div className={ `flex_row flex_center w_100` }>
-									<p>Comics content placeholder</p>
+								<div className={ `flex_row flex_center w_100 m_2` }>
+									<h3>Graded Comics</h3>
 								</div>
-								<div className={ `flex_row flex_center w_100` }>
-									<button onClick={ fetchGradedComicsGet }>Test GET</button>
-								</div>
-								<div className={ `flex_row flex_center w_100` }>
-									<button onClick={ fetchGradedComicsPost }>Test POST</button>
-								</div>
-								<div className={ `flex_row flex_center w_100` }>
+								<div className={ `flex_row flex_center w_75 h_50` }>
 									<CollectionTable
 										tableHeaders = { comicTableHeaders }
+										tableClasses = { comicTableClasses }
 										tableRows = { comicTableRows }
 									/>
 								</div>
@@ -48,6 +28,54 @@ export default function Comics({ comicTableHeaders, comicTableRows }) {
 			</div>
 		</Layout>
 	);
+}
+
+// Server side pre-rendering.
+export async function getStaticProps() {
+	const GRADED_COMICS_HEADERS = {
+		title: true,
+		issue: true,
+		grade: true,
+		page_qual: true,
+		grader: true,
+		cert_num: true,
+		publisher: true,
+		pub_month: true,
+		pub_year: true,
+		variant: true,
+		key_notes: true,
+		signed_by: true,
+		// pedigree: true
+	};
+	
+	const GRADED_COMICS_CLASSES = {
+		table: 'graded_comics_table',
+		tbody: 'graded_comics_tbody',
+		trHeader: 'graded_comics_tr_header',
+		th: 'graded_comics_th',
+		trBody: 'graded_comics_tr_data',
+		td: 'graded_comics_td'
+	};
+
+	const prisma = new PrismaClient();
+	const response = await prisma.comics_graded.findMany({
+		select: GRADED_COMICS_HEADERS,
+		orderBy: [
+			{
+				title: 'asc'
+			},
+			{
+				issue: 'asc'
+			}
+		]
+	});
+	return {
+		props: {
+			comicTableHeaders: GRADED_COMICS_HEADERS,
+			comicTableClasses: GRADED_COMICS_CLASSES,
+			comicTableRows: JSON.parse(JSON.stringify(response))
+		}
+	};
 }
 
 // Client side fetching, get request.
@@ -92,20 +120,4 @@ function fetchGradedComicsPost() {
 	request().then((response) => {
 		console.log(response);
 	})
-}
-
-// Server side pre-rendering.
-export async function getStaticProps() {
-	const prisma = new PrismaClient();
-	const response = await prisma.comics_graded.findMany({
-		orderBy: [
-			{
-				title: 'asc'
-			},
-			{
-				issue: 'asc'
-			}
-		]
-	});
-	return { props: { comicTableHeaders: GRADED_COMICS_HEADERS, comicTableRows: JSON.parse(JSON.stringify(response)) } };
 }
