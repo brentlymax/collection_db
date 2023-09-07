@@ -5,7 +5,7 @@
     "build": "next build",
     "build-out": "next build && next export",
     "start": "next start",
-	"build-start": "next build && next start"
+    "build-start": "next build && next start"
   },
   "dependencies": {
     "@prisma/client": "^5.2.0",

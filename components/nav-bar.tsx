@@ -66,7 +66,7 @@ export default function NavBar() {
 
 function NavItem({ text, href }) {
 	const { asPath } = useRouter();
-	let isActive = false;
+	let isActive: boolean = false;
 
 	if (asPath == href) {
 		isActive = true;

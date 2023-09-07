@@ -27,7 +27,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "app/api/comics/comic.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
