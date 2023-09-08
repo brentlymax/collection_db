@@ -15,15 +15,15 @@ type GradedComicsRow = {
 	key_notes: string|null,
 	signed_by: string|null,
 };
+
 type CollectionTableData = {
-	tableId: string,
-	tableRows: GradedComicsRow[],
+	tableRows: any,
 	tablePageIndex: number,
 	tablePageLen: number,
 	tablePageTotal: number
 };
-type CollectionTablePostData = {
-	tableId: string,
+
+type CollectionTablePostBody = {
 	orderBy: string,
 	orderDir: string,
 	pageIndex: number,
@@ -45,6 +45,7 @@ const GRADED_COMICS_HEADERS: {} = {
 	signed_by: true,
 	// pedigree: true
 };
+
 const prisma: any = new PrismaClient();
 
 /**
@@ -53,14 +54,13 @@ const prisma: any = new PrismaClient();
  * @returns 
  */
 export async function POST(req: NextRequest) {
-	let postData: CollectionTablePostData = await req.json();
-	let tableId = postData.tableId;
+	let postData: CollectionTablePostBody = await req.json();
 	let tablePageIndex = postData.pageIndex;
 	let tablePageLen = postData.pageLen;
 	let tableRowSkip: number = (tablePageIndex - 1) * tablePageLen;
 	let tableOrderBy: {}[] = getTableOrderByOption(postData.orderBy, postData.orderDir);
 
-	const [resTableRows, resRowTotal] = await prisma.$transaction([
+	const [resTableRows, resRowTotal]: [GradedComicsRow, number] = await prisma.$transaction([
 		prisma.comics_graded.findMany({
 			select: GRADED_COMICS_HEADERS,
 			skip: tableRowSkip,
@@ -72,7 +72,6 @@ export async function POST(req: NextRequest) {
 
 	let tablePageTotal: number = Math.ceil(resRowTotal / tablePageLen);
 	let res: CollectionTableData = {
-		tableId: tableId,
 		tableRows: resTableRows,
 		tablePageIndex: tablePageIndex,
 		tablePageLen: tablePageLen,
