@@ -17,13 +17,15 @@ type GradedComicsRow = {
 	key_notes: string|null,
 	signed_by: string|null,
 };
-type GradedComicsTableData = {
+type CollectionTableData = {
+	tableId: string,
 	tableRows: GradedComicsRow[],
 	tablePageIndex: number,
 	tablePageLen: number,
 	tablePageTotal: number
 };
-type GradedComicsPostData = {
+type CollectionTablePostData = {
+	tableId: string,
 	orderBy: string,
 	orderDir: string,
 	pageIndex: number,
@@ -45,14 +47,7 @@ const GRADED_COMICS_HEADERS: {} = {
 	signed_by: true,
 	// pedigree: true
 };
-const GRADED_COMICS_CLASSES: {} = {
-	table: 'graded_comics_table',
-	tbody: 'graded_comics_tbody',
-	th: 'graded_comics_th',
-	trHead: 'graded_comics_tr_head',
-	trBody: 'graded_comics_tr_body',
-	td: 'graded_comics_td'
-};
+
 const prisma: any = new PrismaClient();
 
 /**
@@ -60,7 +55,7 @@ const prisma: any = new PrismaClient();
  * @param param0 
  * @returns 
  */
-export default function Comics({ comicTableRows, comicTablePageIndex, comicTablePageLen, comicTablePageTotal }) {
+export default function Comics({ comicTableId, comicTableRows, comicTablePageIndex, comicTablePageLen, comicTablePageTotal }) {
 	const [tableOrderCol, setTableOrderCol] = useState('title');
 	const [tableOrderDir, setTableOrderDir] = useState('asc');
 	const [tableRows, setTableRows] = useState(comicTableRows);
@@ -70,26 +65,29 @@ export default function Comics({ comicTableRows, comicTablePageIndex, comicTable
 	const firstUpdate = useRef(true);
 
 	async function updateTable() {
-		let tableData: GradedComicsTableData = await fetchGradedComicsPost(tableOrderCol, tableOrderDir, tablePageIndex, tablePageLen);
+		let tableData: CollectionTableData = await fetchCollectionTableData(comicTableId, tableOrderCol, tableOrderDir, tablePageIndex, tablePageLen);
 		setTablePageTotal(tableData.tablePageTotal);
 		setTableRows(tableData.tableRows);
 	}
 
+	// When table page num is changed (by button click)
 	useEffect(() => {	
 		if (firstUpdate.current) {
 			firstUpdate.current = false;
 		} else {
 			updateTable();
+			setDivScrollTop(comicTableId);
 		}
 	}, [tablePageIndex]);
 
+	// When table page len is changed (by dropdown change)
 	useEffect(() => {
-		setTablePageIndex(1);
-
 		if (firstUpdate.current) {
 			firstUpdate.current = false;
 		} else {
+			setTablePageIndex(1);
 			updateTable();
+			setDivScrollTop(comicTableId);
 		}
 	}, [tablePageLen]);
 
@@ -105,8 +103,8 @@ export default function Comics({ comicTableRows, comicTablePageIndex, comicTable
 								</div>
 								<div className={ `flex_row flex_center h_50` } style={ { width:'90%' } }>
 									<CollectionTable
+										tableId = { comicTableId }
 										tableHeaders = { GRADED_COMICS_HEADERS }
-										tableClasses = { GRADED_COMICS_CLASSES }
 										tableRows = { tableRows }
 										tablePageIndex = { tablePageIndex }
 										setTablePageIndex = { setTablePageIndex }
@@ -132,8 +130,9 @@ export default function Comics({ comicTableRows, comicTablePageIndex, comicTable
  * @param tablePageLen 
  * @returns 
  */
-async function fetchGradedComicsPost(tableOrderCol: string, tableOrderDir: string, tablePageIndex: number, tablePageLen: number) {
-	let postData: GradedComicsPostData = {
+async function fetchCollectionTableData(tableId: string, tableOrderCol: string, tableOrderDir: string, tablePageIndex: number, tablePageLen: number) {
+	let postData: CollectionTablePostData = {
+		tableId: tableId,
 		orderBy: tableOrderCol,
 		orderDir: tableOrderDir,
 		pageIndex: tablePageIndex,
@@ -150,7 +149,7 @@ async function fetchGradedComicsPost(tableOrderCol: string, tableOrderDir: strin
 			body: JSON.stringify(postData)
 		}
 	);
-	const res: GradedComicsTableData = await req.json();
+	const res: CollectionTableData = await req.json();
 
 	return res;
 }
@@ -160,6 +159,7 @@ async function fetchGradedComicsPost(tableOrderCol: string, tableOrderDir: strin
  * @returns 
  */
 export async function getServerSideProps() {
+	let tableId: string = 'graded_comics_table';
 	let tablePageIndex: number = 1;
 	let tablePageLen: number = 10;
 	let tableRowSkip: number = (tablePageIndex - 1) * tablePageLen;
@@ -179,13 +179,22 @@ export async function getServerSideProps() {
 	]);
 
 	let tablePageTotal: number = Math.ceil(resRowTotal / tablePageLen);
+	let tableData: {} = {
+		comicTableId: tableId,
+		comicTableRows: JSON.parse(JSON.stringify(resTableRows)),
+		comicTablePageIndex: tablePageIndex,
+		comicTablePageLen: tablePageLen,
+		comicTablePageTotal: tablePageTotal
+	};
 
 	return {
-		props: {
-			comicTableRows: JSON.parse(JSON.stringify(resTableRows)),
-			comicTablePageIndex: tablePageIndex,
-			comicTablePageLen: tablePageLen,
-			comicTablePageTotal: tablePageTotal
-		}
+		props: tableData
 	};
+}
+
+function setDivScrollTop(divId: string) {
+	let tableDiv: HTMLElement|null = document.getElementById(divId);
+	if (tableDiv != null) {
+		tableDiv.scrollTop = 0;
+	}
 }

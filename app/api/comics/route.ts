@@ -15,13 +15,15 @@ type GradedComicsRow = {
 	key_notes: string|null,
 	signed_by: string|null,
 };
-type GradedComicsTableData = {
+type CollectionTableData = {
+	tableId: string,
 	tableRows: GradedComicsRow[],
 	tablePageIndex: number,
 	tablePageLen: number,
 	tablePageTotal: number
 };
-type GradedComicsPostData = {
+type CollectionTablePostData = {
+	tableId: string,
 	orderBy: string,
 	orderDir: string,
 	pageIndex: number,
@@ -51,7 +53,8 @@ const prisma: any = new PrismaClient();
  * @returns 
  */
 export async function POST(req: NextRequest) {
-	let postData: GradedComicsPostData = await req.json();
+	let postData: CollectionTablePostData = await req.json();
+	let tableId = postData.tableId;
 	let tablePageIndex = postData.pageIndex;
 	let tablePageLen = postData.pageLen;
 	let tableRowSkip: number = (tablePageIndex - 1) * tablePageLen;
@@ -68,7 +71,8 @@ export async function POST(req: NextRequest) {
 	]);
 
 	let tablePageTotal: number = Math.ceil(resRowTotal / tablePageLen);
-	let res: GradedComicsTableData = {
+	let res: CollectionTableData = {
+		tableId: tableId,
 		tableRows: resTableRows,
 		tablePageIndex: tablePageIndex,
 		tablePageLen: tablePageLen,
