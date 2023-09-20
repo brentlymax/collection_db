@@ -1,40 +1,8 @@
+import { CollectionTableData } from '../../lib/global/types';
+import { GRADED_COMICS_TABLE_DEFAULTS, GRADED_COMICS_TABLE_HEADERS } from '../../lib/global/constants';
 import Layout from '../../components/layout';
 import CollectionTable from '../../components/collection-table';
 import { PrismaClient } from '@prisma/client';
-
-type CollectionTableData = {
-	tableRows: any,
-	tablePageIndex: number,
-	tablePageLen: number,
-	tablePageTotal: number
-};
-
-const GRADED_COMICS_TABLE_DEFAULTS: any = {
-	tableId: 'graded_comics_table',
-	tableRoute: '/api/comics',
-	tablePageIndex: 1,
-	tablePageLen: 10,
-	tableOrderBy: [
-		{ 'title': 'asc' },
-		{ 'issue': 'asc' }
-	]
-};
-
-const GRADED_COMICS_HEADERS: {} = {
-	title: true,
-	issue: true,
-	grade: true,
-	page_qual: true,
-	grader: true,
-	cert_num: true,
-	publisher: true,
-	pub_month: true,
-	pub_year: true,
-	variant: true,
-	key_notes: true,
-	signed_by: true,
-	// pedigree: true
-};
 
 const prisma: any = new PrismaClient();
 
@@ -57,7 +25,7 @@ export default function Comics({ initTableData }) {
 								<div className={ `flex_row flex_center h_50` } style={ { width:'90%' } }>
 									<CollectionTable
 										tableId={ GRADED_COMICS_TABLE_DEFAULTS.tableId }
-										tableHeaders={ GRADED_COMICS_HEADERS }
+										tableHeaders={ GRADED_COMICS_TABLE_HEADERS }
 										tableRoute={ GRADED_COMICS_TABLE_DEFAULTS.tableRoute }
 										initTableData={ initTableData }
 									/>
@@ -80,7 +48,7 @@ export async function getServerSideProps() {
 
 	const [resTableRows, resRowTotal] = await prisma.$transaction([
 		prisma.comics_graded.findMany({
-			select: GRADED_COMICS_HEADERS,
+			select: GRADED_COMICS_TABLE_HEADERS,
 			skip: tableRowSkip,
 			take: GRADED_COMICS_TABLE_DEFAULTS.tablePageLen,
 			orderBy: GRADED_COMICS_TABLE_DEFAULTS.tableOrderBy

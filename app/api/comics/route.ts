@@ -1,50 +1,7 @@
-import { NextResponse, type NextRequest } from 'next/server';
+import { CollectionTableData, CollectionTablePostBody, GradedComicsRow } from '../../../lib/global/types';
+import { GRADED_COMICS_TABLE_HEADERS } from '../../../lib/global/constants';
+import { NextResponse, NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
- 
-type GradedComicsRow = {
-	title: string,
-	issue: number,
-	grade: number,
-	page_qual: string,
-	grader: string,
-	cert_num: string,
-	publisher: string,
-	pub_month: number|null,
-	pub_year: number|null,
-	variant: string|null,
-	key_notes: string|null,
-	signed_by: string|null,
-};
-
-type CollectionTableData = {
-	tableRows: any,
-	tablePageIndex: number,
-	tablePageLen: number,
-	tablePageTotal: number
-};
-
-type CollectionTablePostBody = {
-	orderBy: string,
-	orderDir: string,
-	pageIndex: number,
-	pageLen: number
-};
-
-const GRADED_COMICS_HEADERS: {} = {
-	title: true,
-	issue: true,
-	grade: true,
-	page_qual: true,
-	grader: true,
-	cert_num: true,
-	publisher: true,
-	pub_month: true,
-	pub_year: true,
-	variant: true,
-	key_notes: true,
-	signed_by: true,
-	// pedigree: true
-};
 
 const prisma: any = new PrismaClient();
 
@@ -62,7 +19,7 @@ export async function POST(req: NextRequest) {
 
 	const [resTableRows, resRowTotal]: [GradedComicsRow, number] = await prisma.$transaction([
 		prisma.comics_graded.findMany({
-			select: GRADED_COMICS_HEADERS,
+			select: GRADED_COMICS_TABLE_HEADERS,
 			skip: tableRowSkip,
 			take: tablePageLen,
 			orderBy: tableOrderBy
@@ -92,23 +49,47 @@ function getTableOrderByOption(orderCol: string, orderDir: string) {
 	let orderOption: {} = {};
 	orderOption[orderCol] = orderDir;
 
-	if (orderCol === 'title') {
-		orderBy.push(
-			orderOption,
-			{ 'issue': orderDir }
-		);
-	} else if (orderCol === 'issue') {
-		orderBy.push(
-			orderOption,
-			{ 'title': orderDir }
-		);
-	}
-	else {
-		orderBy.push(
-			orderOption,
-			{ 'title': orderDir },
-			{ 'issue': orderDir }
-		);
+	switch(orderCol) {
+		case 'title':
+			orderBy.push(
+				orderOption,
+				{ 'issue': orderDir },
+				{ 'pub_year': orderDir },
+				{ 'pub_month': orderDir }
+			);
+			break;
+		case 'issue':
+			orderBy.push(
+				orderOption,
+				{ 'title': orderDir },
+				{ 'pub_year': orderDir },
+				{ 'pub_month': orderDir }
+			);
+			break;
+		case 'pub_year':
+			orderBy.push(
+				orderOption,
+				{ 'title': orderDir },
+				{ 'issue': orderDir },
+				{ 'pub_month': orderDir }
+			);
+			break;
+		case 'pub_month':
+			orderBy.push(
+				orderOption,
+				{ 'title': orderDir },
+				{ 'issue': orderDir },
+				{ 'pub_year': orderDir }
+			);
+			break;
+		default:
+			orderBy.push(
+				orderOption,
+				{ 'title': orderDir },
+				{ 'issue': orderDir },
+				{ 'pub_year': orderDir },
+				{ 'pub_month': orderDir }
+			);
 	}
 
 	return orderBy;
