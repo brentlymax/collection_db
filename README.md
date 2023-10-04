@@ -8,4 +8,4 @@ npx prisma generate
 
 # Exec mysql files (from project root)
 mysql -u<user> -p<password> collection < mysql/collection_db_create.sql
-mysql -u<user> -p<password> collection < mysql/collection_db_insert.sql
+mysql -u<user> -p<password> collection < mysql/comics_graded_insert.sql
