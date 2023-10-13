@@ -360,32 +360,33 @@ p {
 	color: #D251DE;
 }
 
-@media screen and (min-width: 600px) {
-	.nav_bar_menu_btn {
-		display: none;
-	}
-
-	.nav_bar_menu_div {
-		position: unset;
-		flex-direction: row;
-		align-items: center;
-		width: fit-content;
-		min-height: fit-content;
-		column-gap: 24px;
-	}
-}
-
 .collection_table_pagination_row {
 	background: #36454F;
 }
 
 .collection_table_pagination_btns {
+	cursor: pointer;
+	width: 30px;
 	border: unset;
 }
 
 .collection_table_pagination_btns.active {
 	pointer-events: none;
 	background: #d251de;
+	color: white;
+}
+
+.collection_table_pagination_arrows {
+	font-weight: bold;
+	border: unset;
+	background: unset;
+	pointer-events: none;
+	color: grey;
+}
+
+.collection_table_pagination_arrows.enabled {
+	cursor: pointer;
+	pointer-events: auto;
 	color: white;
 }
 
@@ -426,4 +427,27 @@ p {
 .collection_table_td {
 	min-width: 10%;
 	padding: 1rem;
+}
+
+/* When width is 600px or greater. */
+@media screen and (min-width: 600px) {
+	.nav_bar_menu_btn {
+		display: none;
+	}
+
+	.nav_bar_menu_div {
+		position: unset;
+		flex-direction: row;
+		align-items: center;
+		width: fit-content;
+		min-height: fit-content;
+		column-gap: 24px;
+	}
+}
+
+/* When width is 650px or less */
+@media screen and (max-width: 650px) {
+	.pagination_text {
+		display: none;
+	}
 }

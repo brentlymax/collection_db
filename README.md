@@ -1,6 +1,8 @@
 # Build and start (from project root)
 npm run build
 npm run start
+# OR
+npm run build-start
 
 # Update prisma (from project root)
 npx prisma db pull

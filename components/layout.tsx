@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import NavBar from './nav-bar';
 
 export default function Layout({ children }) {
@@ -20,14 +19,13 @@ export default function Layout({ children }) {
 			</div>
 
 			<footer className={ `footer` }>
-				<Image
-					priority
+				<img
 					src={ `/images/icons/treasure_chest.ico` }
 					className={ `pr_1` }
-					height={ 25 }
-					width={ 25 }
+					height={ 20 }
+					width={ 20 }
 					alt={ `` }
-				></Image>
+				/>
 				<h5>Powered by users like you!</h5>
 			</footer>
 		</div>

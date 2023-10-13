@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+import TablePagination from '../components/table-pagination';
 
 type CollectionTableData = {
 	tableRows: any[],
@@ -59,23 +60,6 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 		}
 	}, [tablePageLen]);
 
-	// Build pagination buttons HTML.
-	let paginationBtns: React.JSX.Element[] = [];
-	for (let i = 1; i <= tablePageTotal; i++) {
-		paginationBtns.push(
-			<div className={ `flex_col flex_between` }>
-				<button
-					className={ `collection_table_pagination_btns ${ (i === tablePageIndex) ? 'active' : '' }` }
-					style={ { marginLeft: '0.5rem' } }
-					key={ i }
-					onClick={ () => setTablePageIndex(i) }
-				>
-					{ i }
-				</button>
-			</div>
-		);
-	}
-
 	return (
 		<div className={ `flex_col flex_center w_100 h_100` }>
 			{ /* Table content */ }
@@ -116,42 +100,13 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 				</table>
 			</div>
 			{ /* Table pagination */ }
-			<div className={ `flex_row flex_between collection_table_pagination_row w_100` }>
-				<div className={ `flex_col p_1` }>
-					<div className={ `flex_row flex_between` }>
-						<div className={ `flex_col flex_center mr_1` }>
-							<p style={ { fontSize: '12px' } }>Page Length</p>
-						</div>
-						<div className={ `flex_col` }>
-							<select
-								value={ tablePageLen }
-								onChange={
-									(e) => {
-										setTablePageLen(parseInt(e.target.value));
-									}
-								}
-							>
-								<option value='10'>10</option>
-								<option value='25'>25</option>
-								<option value='50'>50</option>
-								<option value='100'>100</option>
-							</select>
-						</div>
-					</div>
-				</div>
-				<div className={ `flex_col p_1` }>
-					<div className={ `flex_row flex_between` }>
-						<div className={ `flex_col` }>
-							<div className={ `flex_row flex_center` }>
-								{ paginationBtns } 
-							</div>
-						</div>
-						<div className={ `flex_col flex_center ml_1` }>
-							<p style={ { fontSize: '12px' } }>Page Number</p>
-						</div>
-					</div>
-				</div>
-			</div>
+			<TablePagination
+				tablePageIndex={ tablePageIndex }
+				setTablePageIndex={ setTablePageIndex }
+				tablePageLen={ tablePageLen }
+				setTablePageLen={ setTablePageLen }
+				tablePageTotal={ tablePageTotal }
+			/>
 		</div>
 	);
 }
