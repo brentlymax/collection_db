@@ -390,6 +390,13 @@ p {
 	color: white;
 }
 
+.table_modal_close_btn {
+	cursor: pointer;
+	border: unset;
+	background: unset;
+	color: white;
+}
+
 .collection_table {
 	border-collapse: separate;
 	border-spacing: 0;

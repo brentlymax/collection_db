@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import TablePagination from '../components/table-pagination';
+import TableModal from '../components/table-modal';
 
 type CollectionTableData = {
 	tableRows: any[],
@@ -27,7 +28,14 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 	const [tablePageIndex, setTablePageIndex]: [number, Function] = useState(initTableData.tablePageIndex);
 	const [tablePageLen, setTablePageLen]: [number, Function] = useState(initTableData.tablePageLen);
 	const [tablePageTotal, setTablePageTotal]: [number, Function] = useState(initTableData.tablePageTotal);
+	const [tableModalIsOpen, setTableModalIsOpen] = useState(false);
+	const [tableModalContent, setTableModalContent] = useState({});
 	let isEvenRow: boolean = false;
+
+	function openTableModal(data: {}) {
+		setTableModalContent(data);
+		setTableModalIsOpen(true);
+	}
 	
 	// Helper func that fetches updated table data and updates matching hooks.
 	async function updateTable() {
@@ -62,6 +70,12 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 
 	return (
 		<div className={ `flex_col flex_center w_100 h_100` }>
+			<TableModal
+				tableModalIsOpen={ tableModalIsOpen }
+				setTableModalIsOpen={ setTableModalIsOpen }
+				tableModalContent={ tableModalContent }
+			></TableModal>
+
 			{ /* Table content */ }
 			<div id={ tableId } className={ `flex_row overflow_auto w_100` } style={ { height:'70vh' } }>
 				<table className={ `collection_table` }>
@@ -86,10 +100,17 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 								isEvenRow = !isEvenRow;
 								
 								return (
-									<tr className={ `collection_table_tr_body ${ rowClass }` }>
+									<tr
+										className={ `collection_table_tr_body ${ rowClass }` }
+										onClick={ () => openTableModal(row) }
+									>
 										{
 											row && Object.keys(row).map((key) => (
-												<td className={ `collection_table_td` }>{ row[key] }</td>
+												<td
+													className={ `collection_table_td` }
+												>
+													{ row[key] }
+												</td>
 											))
 										}
 									</tr>
@@ -152,4 +173,9 @@ function setDivScrollTop(divId: string) {
 	if (div != null) {
 		div.scrollTop = 0;
 	}
+}
+
+function setTableModalContent(data: []) {
+	console.log(data['title']);
+	console.log(data['issue']);
 }

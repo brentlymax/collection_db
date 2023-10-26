@@ -1,18 +1,3 @@
-/*
-
-INSERT INTO `comics_graded`
-	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
-	VALUES
-	("", , , , "", 9.8, "white", "CGC", "", "blue", null, "", null, null);
-
-Confirm the ID of:
-	Batman 452, the really old case
-
-
-
-
-*/
-
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
 	VALUES
@@ -256,7 +241,7 @@ INSERT INTO `comics_graded`
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
 	VALUES
-	("Dark Nights: Metal", 5, 3, 2018, "D.C. Comics", 9.8, "white", "CGC", "1259392003", "blue", "Mattina Virgin Edition", null, null, null);
+	("Dark Nights: Metal", 5, 3, 2018, "D.C. Comics", 9.8, "white", "CGC", "1259392003", "blue", "Mattina Virgin Edition", "Foil cover.", null, null);
 
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
@@ -711,7 +696,7 @@ INSERT INTO `comics_graded`
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
 	VALUES
-	("Cliver Barker's Book of the Damned", 3, 11, 1992, "Marvel/Epic Comics", 9.8, "white", "CGC", "3820854009", "blue", null, "John Rheaume cover.", null, null);
+	("Clive Barker's Book of the Damned", 3, 11, 1992, "Marvel/Epic Comics", 9.8, "white", "CGC", "3820854009", "blue", null, "John Rheaume cover.", null, null);
 
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
@@ -1056,9 +1041,9 @@ INSERT INTO `comics_graded`
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
 	VALUES
-	("Cliver Barker's Hellraiser", 7, null, 1991, "Marvel/Epic Comics", 9.8, "white", "CGC", "4201895006", "blue", null, null, null, null);
+	("Clive Barker's Hellraiser", 7, null, 1991, "Marvel/Epic Comics", 9.8, "white", "CGC", "4201895006", "blue", null, null, null, null);
 
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
 	VALUES
-	("Cliver Barker's Hellraiser", 10, null, 1991, "Marvel/Epic Comics", 9.8, "white", "CGC", "4201895009", "blue", null, "Prismatic foil cover. Forward by D.G. Chichester.", null, null);
+	("Clive Barker's Hellraiser", 10, null, 1991, "Marvel/Epic Comics", 9.8, "white", "CGC", "4201895009", "blue", null, "Prismatic foil cover. Forward by D.G. Chichester.", null, null);
