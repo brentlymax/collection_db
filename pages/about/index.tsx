@@ -1,19 +1,18 @@
-import Image from 'next/image';
 import Layout from '../../components/layout';
 import style from '../../styles/about.module.css';
 
 export default function About() {
 	return (
 		<Layout>
-			<div className={ `flex_col flex_center w_100 h_100` }>
-				<div className={ `flex_row w_100 flex_center mb_3` }>
+			<div className={ `flex_col flex_center w_100` }>
+				<div className={ `flex_row w_100 flex_center mt_2 mb_1` }>
 					<div className={ `${ style.image_wrapper } flex_col` }>
-						<Image
+						<img
 							src={ `/images/brentlymax.jpg` }
-							alt=''
-							layout='fill'
-							objectFit='contain'
-						></Image>				
+							className={ `` }
+							width={ '100%' }
+							alt={ `` }
+						/>
 					</div>
 				</div>
 				<div className={ `flex_row w_100` }>
