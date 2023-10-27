@@ -9,20 +9,20 @@ const MODAL_STYLE = {
 	}
 };
 
-export default function TableModal({ tableModalIsOpen, setTableModalIsOpen, tableModalContent }) {
+export default function CollectionModal({ collectionModalIsOpen, setCollectionModalIsOpen, collectionModalContent }) {
 	function afterOpenModal() {
 	// references are now sync'd and can be accessed.
 	// subtitle.style.color = '#f00';
 	}
 	
 	function closeModal() {
-		setTableModalIsOpen(false);
+		setCollectionModalIsOpen(false);
 	}
 
 	return (
 		<div>
 			<Modal
-				isOpen={ tableModalIsOpen }
+				isOpen={ collectionModalIsOpen }
 				onAfterOpen={ afterOpenModal }
 				onRequestClose={ closeModal }
 				style={ MODAL_STYLE }
@@ -39,14 +39,14 @@ export default function TableModal({ tableModalIsOpen, setTableModalIsOpen, tabl
 					</div>
 					{/* Text content */}
 					{
-						tableModalContent && Object.keys(tableModalContent).map((key) => {
+						collectionModalContent && Object.keys(collectionModalContent).map((key) => {
 							return (
 								<div className={ `w_100 flex_row flex_center mb_1` }>
 									<div className={ `flex_col pr_2` } style={ { width:'40%', justifyContent:'center', alignItems:'end' } }>
 										<h4 style={ { color:'white' } }>{ key }:</h4>
 									</div>
 									<div className={ `flex_col` } style={ { width:'40%', justifyContent:'center' } }>
-										<h5 style={ { color:'white' } }>{ tableModalContent[key] }</h5>
+										<h5 style={ { color:'white' } }>{ collectionModalContent[key] }</h5>
 									</div>
 								</div>
 							);

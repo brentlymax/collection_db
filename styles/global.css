@@ -99,6 +99,10 @@ p {
 	justify-content: space-around;
 }
 
+.no_wrap {
+	white-space: nowrap;
+}
+
 .overflow_auto {
 	overflow-x: auto;
 	overflow-y: auto;

@@ -1,5 +1,5 @@
 import { CollectionTableData } from '../../lib/global/types';
-import { GRADED_COMICS_TABLE_DEFAULTS, GRADED_COMICS_TABLE_HEADERS } from '../../lib/global/constants';
+import { GRADED_COMICS_OPTIONS, GRADED_COMICS_COLUMNS_TABLE } from '../../lib/global/constants';
 import Layout from '../../components/layout';
 import CollectionTable from '../../components/collection-table';
 import { PrismaClient } from '@prisma/client';
@@ -22,11 +22,12 @@ export default function Comics({ initTableData }) {
 								<div className={ `flex_row flex_center w_100 m_1` }>
 									<h3>Graded Comics</h3>
 								</div>
-								<div className={ `flex_row flex_center h_50` } style={ { width:'90%' } }>
+								<div className={ `flex_row flex_center h_50` } style={ { width:'98%' } }>
 									<CollectionTable
-										tableId={ GRADED_COMICS_TABLE_DEFAULTS.tableId }
-										tableHeaders={ GRADED_COMICS_TABLE_HEADERS }
-										tableRoute={ GRADED_COMICS_TABLE_DEFAULTS.tableRoute }
+										tableId={ GRADED_COMICS_OPTIONS.tableId }
+										tableHeaders={ GRADED_COMICS_COLUMNS_TABLE }
+										tableRoute={ GRADED_COMICS_OPTIONS.tableRoute }
+										rowRoute={ GRADED_COMICS_OPTIONS.rowRoute }
 										initTableData={ initTableData }
 									/>
 								</div>
@@ -44,23 +45,23 @@ export default function Comics({ initTableData }) {
  * @returns 
  */
 export async function getServerSideProps() {
-	let tableRowSkip: number = (GRADED_COMICS_TABLE_DEFAULTS.tablePageIndex - 1) * GRADED_COMICS_TABLE_DEFAULTS.tablePageLen;
+	let tableRowSkip: number = (GRADED_COMICS_OPTIONS.tablePageIndex - 1) * GRADED_COMICS_OPTIONS.tablePageLen;
 
 	const [resTableRows, resRowTotal] = await prisma.$transaction([
 		prisma.comics_graded.findMany({
-			select: GRADED_COMICS_TABLE_HEADERS,
+			select: GRADED_COMICS_COLUMNS_TABLE,
 			skip: tableRowSkip,
-			take: GRADED_COMICS_TABLE_DEFAULTS.tablePageLen,
-			orderBy: GRADED_COMICS_TABLE_DEFAULTS.tableOrderBy
+			take: GRADED_COMICS_OPTIONS.tablePageLen,
+			orderBy: GRADED_COMICS_OPTIONS.tableOrderBy
 		}),
 		prisma.comics_graded.count()
 	]);
 
-	let tablePageTotal: number = Math.ceil(resRowTotal / GRADED_COMICS_TABLE_DEFAULTS.tablePageLen);
+	let tablePageTotal: number = Math.ceil(resRowTotal / GRADED_COMICS_OPTIONS.tablePageLen);
 	let gradedComicsTableData: CollectionTableData = {
 		tableRows: JSON.parse(JSON.stringify(resTableRows)),
-		tablePageIndex: GRADED_COMICS_TABLE_DEFAULTS.tablePageIndex,
-		tablePageLen: GRADED_COMICS_TABLE_DEFAULTS.tablePageLen,
+		tablePageIndex: GRADED_COMICS_OPTIONS.tablePageIndex,
+		tablePageLen: GRADED_COMICS_OPTIONS.tablePageLen,
 		tablePageTotal: tablePageTotal
 	};
 

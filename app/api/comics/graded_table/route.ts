@@ -1,5 +1,5 @@
-import { CollectionTableData, CollectionTablePostBody, GradedComicsRow } from '../../../lib/global/types';
-import { GRADED_COMICS_TABLE_HEADERS } from '../../../lib/global/constants';
+import { GradedComicsRow, CollectionTableData, CollectionTablePostBody } from '../../../../lib/global/types';
+import { GRADED_COMICS_COLUMNS_TABLE } from '../../../../lib/global/constants';
 import { NextResponse, NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
 	const [resTableRows, resRowTotal]: [GradedComicsRow, number] = await prisma.$transaction([
 		prisma.comics_graded.findMany({
-			select: GRADED_COMICS_TABLE_HEADERS,
+			select: GRADED_COMICS_COLUMNS_TABLE,
 			skip: tableRowSkip,
 			take: tablePageLen,
 			orderBy: tableOrderBy
@@ -53,9 +53,9 @@ function getTableOrderByOption(orderCol: string, orderDir: string) {
 		case 'title':
 			orderBy.push(
 				orderOption,
-				{ 'issue': orderDir },
 				{ 'pub_year': orderDir },
-				{ 'pub_month': orderDir }
+				{ 'pub_month': orderDir },
+				{ 'issue': orderDir }
 			);
 			break;
 		case 'issue':
@@ -70,25 +70,25 @@ function getTableOrderByOption(orderCol: string, orderDir: string) {
 			orderBy.push(
 				orderOption,
 				{ 'title': orderDir },
-				{ 'issue': orderDir },
-				{ 'pub_month': orderDir }
+				{ 'pub_month': orderDir },
+				{ 'issue': orderDir }
 			);
 			break;
 		case 'pub_month':
 			orderBy.push(
 				orderOption,
 				{ 'title': orderDir },
-				{ 'issue': orderDir },
-				{ 'pub_year': orderDir }
+				{ 'pub_year': orderDir },
+				{ 'issue': orderDir }
 			);
 			break;
 		default:
 			orderBy.push(
 				orderOption,
 				{ 'title': orderDir },
-				{ 'issue': orderDir },
 				{ 'pub_year': orderDir },
-				{ 'pub_month': orderDir }
+				{ 'pub_month': orderDir },
+				{ 'issue': orderDir }
 			);
 	}
 

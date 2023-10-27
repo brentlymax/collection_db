@@ -1,44 +1,32 @@
+import { GradedComicsRow, CollectionTableData, CollectionTablePostBody, CollectionModalData, CollectionModalPostBody } from '../lib/global/types';
 import React, {useState, useEffect, useRef} from 'react';
 import TablePagination from '../components/table-pagination';
-import TableModal from '../components/table-modal';
-
-type CollectionTableData = {
-	tableRows: any[],
-	tablePageIndex: number,
-	tablePageLen: number,
-	tablePageTotal: number
-};
-
-type CollectionTablePostBody = {
-	orderBy: string,
-	orderDir: string,
-	pageIndex: number,
-	pageLen: number
-};
+import CollectionModal from '../components/collection-modal';
 
 /**
  * Collection table component.
  * @param param0 
  * @returns 
  */
-export default function CollectionTable({ tableId, tableHeaders, tableRoute, initTableData }) {
+export default function CollectionTable({ tableId, tableHeaders, tableRoute, rowRoute, initTableData }) {
 	const [tableOrderCol, setTableOrderCol]: [string, Function] = useState('title');
 	const [tableOrderDir, setTableOrderDir]: [string, Function] = useState('asc');
 	const [tableRows, setTableRows]: [any, Function] = useState(initTableData.tableRows);
 	const [tablePageIndex, setTablePageIndex]: [number, Function] = useState(initTableData.tablePageIndex);
 	const [tablePageLen, setTablePageLen]: [number, Function] = useState(initTableData.tablePageLen);
 	const [tablePageTotal, setTablePageTotal]: [number, Function] = useState(initTableData.tablePageTotal);
-	const [tableModalIsOpen, setTableModalIsOpen] = useState(false);
-	const [tableModalContent, setTableModalContent] = useState({});
+	const [collectionModalIsOpen, setCollectionModalIsOpen] = useState(false);
+	const [collectionModalContent, setCollectionModalContent] = useState({});
 	let isEvenRow: boolean = false;
 
-	function openTableModal(data: {}) {
-		setTableModalContent(data);
-		setTableModalIsOpen(true);
+	async function openCollectionModal(data: {}) {
+		let row: CollectionModalData = await fetchCollectionModalData(rowRoute, data['grader'], data['cert_num']);
+		setCollectionModalContent(row.rowData);
+		setCollectionModalIsOpen(true);
 	}
 	
 	// Helper func that fetches updated table data and updates matching hooks.
-	async function updateTable() {
+	async function updateCollectionTable() {
 		let tableData: CollectionTableData = await fetchCollectionTableData(tableRoute, tableOrderCol, tableOrderDir, tablePageIndex, tablePageLen);
 		setTableRows(tableData.tableRows);
 		setTablePageTotal(tableData.tablePageTotal);
@@ -50,7 +38,7 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 		if (firstUpdatePageNum.current) {
 			firstUpdatePageNum.current = false;
 		} else {
-			updateTable();
+			updateCollectionTable();
 			setDivScrollTop(tableId);
 		}
 	}, [tablePageIndex]);
@@ -63,18 +51,18 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 		} else if (tablePageIndex != 1) {
 			setTablePageIndex(1);
 		} else {
-			updateTable();
+			updateCollectionTable();
 			setDivScrollTop(tableId);
 		}
 	}, [tablePageLen]);
 
 	return (
 		<div className={ `flex_col flex_center w_100 h_100` }>
-			<TableModal
-				tableModalIsOpen={ tableModalIsOpen }
-				setTableModalIsOpen={ setTableModalIsOpen }
-				tableModalContent={ tableModalContent }
-			></TableModal>
+			<CollectionModal
+				collectionModalIsOpen={ collectionModalIsOpen }
+				setCollectionModalIsOpen={ setCollectionModalIsOpen }
+				collectionModalContent={ collectionModalContent }
+			></CollectionModal>
 
 			{ /* Table content */ }
 			<div id={ tableId } className={ `flex_row overflow_auto w_100` } style={ { height:'70vh' } }>
@@ -83,9 +71,16 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 						<tr className={ `collection_table_tr_head` }>
 							{
 								tableHeaders && Object.keys(tableHeaders).map((header) => {
-									return (
-										<th className={ `collection_table_th` }>{ header }</th>
-									);
+									let formattedHeader = formatTableHeader(header);
+									if (tableHeaders[header]) {
+										return (
+											<th className={ `collection_table_th` }>
+												<div className={ `flex_start no_wrap` }>
+													{ formattedHeader }
+												</div>
+											</th>
+										);	
+									}
 								})
 							}
 						</tr>
@@ -102,7 +97,7 @@ export default function CollectionTable({ tableId, tableHeaders, tableRoute, ini
 								return (
 									<tr
 										className={ `collection_table_tr_body ${ rowClass }` }
-										onClick={ () => openTableModal(row) }
+										onClick={ () => openCollectionModal(row) }
 									>
 										{
 											row && Object.keys(row).map((key) => (
@@ -164,6 +159,27 @@ async function fetchCollectionTableData(tableRoute: string, tableOrderCol: strin
 	return res;
 }
 
+async function fetchCollectionModalData(tableRoute: string, rowGrader: string, rowCertNum: string) {
+	let postData: CollectionModalPostBody = {
+		grader: rowGrader,
+		certNum: rowCertNum
+	};
+
+	const req = await fetch(
+		tableRoute,
+		{
+			method: 'POST',
+			headers:  {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(postData)
+		}
+	);
+	const res: CollectionModalData = await req.json();
+
+	return res;
+}
+
 /**
  * Resets x-axis scroll to top for the div matching the passed id.
  * @param divId 
@@ -175,7 +191,8 @@ function setDivScrollTop(divId: string) {
 	}
 }
 
-function setTableModalContent(data: []) {
-	console.log(data['title']);
-	console.log(data['issue']);
+function formatTableHeader(header) {
+	let formattedHeader = header.toUpperCase();
+	formattedHeader = formattedHeader.replace('_', ' ');
+	return formattedHeader;
 }
