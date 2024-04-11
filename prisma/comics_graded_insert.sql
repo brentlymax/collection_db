@@ -1,5 +1,4 @@
 /*
-
 INSERT INTO `comics_graded`
 	(title, issue, pub_month, pub_year, publisher, grade, page_qual, grader, cert_num, label_type, variant, key_notes, signed_by, pedigree)
 	VALUES
@@ -7,10 +6,6 @@ INSERT INTO `comics_graded`
 
 Confirm the ID of:
 	Batman 452, the really old case
-
-
-
-
 */
 
 INSERT INTO `comics_graded`
